@@ -1,17 +1,50 @@
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 
-import { getEventById } from "../../data";
+// import { getEventById } from "../../data";
+import {
+  getAllEvents,
+  filterFeaturedEvents,
+  getEventById,
+} from "../../helpers/api-util";
 import EventSummary from "../../components/event-details/EventSummary";
 import EventLogistic from "../../components/event-details/EventLogistic";
 import EventContent from "../../components/event-details/EventContent";
 import ErrorAlert from "../../components/ui/ErrorAlert";
 
-const EventsDetail = () => {
-  const router = useRouter();
+export const getStaticPaths = async () => {
+  // const events = await getAllEvents();
+  const events = await filterFeaturedEvents();
 
-  const eventId = router.query.eventId;
+  const paths = events.map((event) => {
+    return { params: { eventId: event.id } };
+  });
 
-  const event = getEventById(eventId);
+  return {
+    paths,
+    // fallback: false,
+    // fallback: true,
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps = async (context) => {
+  const eventId = context.params.eventId;
+
+  const event = await getEventById(eventId);
+
+  return {
+    props: {
+      event,
+      // Re-generate page every 30 seconds -> not time to time
+      revalidate: 30,
+    },
+  };
+};
+
+const EventsDetail = ({ event }) => {
+  // const router = useRouter();
+
+  // const eventId = router.query.eventId;
 
   if (!event) {
     return (
