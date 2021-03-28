@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import fs from "fs";
 import path from "path";
 
@@ -16,6 +16,8 @@ export const getStaticProps = () => {
 const Feebback = (props) => {
   const emailInputRef = useRef();
   const feedbackInputRef = useRef();
+
+  const [singleFb, setSingleFb] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,6 +43,14 @@ const Feebback = (props) => {
     console.log(data);
   };
 
+  const loadSingleFeedback = async (id) => {
+    const res = await fetch(`/api/${id}`);
+    const data = await res.json();
+
+    console.log("SSS", data);
+    setSingleFb(data.feedback);
+  };
+
   console.log(props);
 
   return (
@@ -62,8 +72,22 @@ const Feebback = (props) => {
       <hr />
       <ul>
         {props.feedback &&
-          props.feedback.map((item) => <li key={item.id}>{item.feedback}</li>)}
+          props.feedback.map((item) => (
+            <li key={item.id}>
+              {item.feedback}{" "}
+              <button onClick={() => loadSingleFeedback(item.id)}>
+                Show details
+              </button>
+            </li>
+          ))}
       </ul>
+      <hr />
+      {singleFb && (
+        <div>
+          <h3>{singleFb.email}</h3>
+          <p>{singleFb.feedback}</p>
+        </div>
+      )}
     </>
   );
 };
