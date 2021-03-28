@@ -44,7 +44,7 @@ const Feebback = (props) => {
   };
 
   const loadSingleFeedback = async (id) => {
-    const res = await fetch(`/api/${id}`);
+    const res = await fetch(`/api/feedback/${id}`);
     const data = await res.json();
 
     console.log("SSS", data);
