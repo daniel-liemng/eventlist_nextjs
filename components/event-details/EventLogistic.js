@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import classes from "../../styles/EventLogistic.module.css";
 import AddressIcon from "../icons/AddressIcon";
 import DateIcon from "../icons/DateIcon";
@@ -17,7 +19,8 @@ const EventLogistic = ({ date, address, image, imageAlt }) => {
   return (
     <section className={classes.logistics}>
       <div className={classes.image}>
-        <img src={formattedImage} alt={imageAlt} />
+        {/* <img src={formattedImage} alt={imageAlt} /> */}
+        <Image src={formattedImage} alt={imageAlt} width={350} height={350} />
       </div>
       <ul className={classes.list}>
         <LogisticItem icon={DateIcon}>

@@ -1,4 +1,5 @@
 import classes from "../../styles/EventItem.module.css";
+import Image from "next/image";
 
 import Button from "../ui/Button";
 import DateIcon from "../icons/DateIcon";
@@ -22,7 +23,8 @@ const EventItem = ({ event }) => {
 
   return (
     <li className={classes.item}>
-      <img src={formattedImage} alt={title} width='200' height='200' />
+      {/* <img src={formattedImage} alt={title} width='200' height='200' /> */}
+      <Image src={formattedImage} alt={title} width={240} height={160} />
       <div className={classes.content}>
         <div className={classes.summary}>
           <h2>{title}</h2>
