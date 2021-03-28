@@ -1,4 +1,5 @@
 // import { useRouter } from "next/router";
+import Head from "next/head";
 
 // import { getEventById } from "../../data";
 import {
@@ -58,6 +59,10 @@ const EventsDetail = ({ event }) => {
 
   return (
     <>
+      <Head>
+        <title>{event.title}</title>
+        <meta name='description' content={event.description} />
+      </Head>
       <EventSummary title={title} />
       <EventLogistic
         date={date}
