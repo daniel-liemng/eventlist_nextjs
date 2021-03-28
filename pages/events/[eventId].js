@@ -11,6 +11,7 @@ import EventSummary from "../../components/event-details/EventSummary";
 import EventLogistic from "../../components/event-details/EventLogistic";
 import EventContent from "../../components/event-details/EventContent";
 import ErrorAlert from "../../components/ui/ErrorAlert";
+import Comments from "../../components/input/Comments";
 
 export const getStaticPaths = async () => {
   // const events = await getAllEvents();
@@ -55,7 +56,7 @@ const EventsDetail = ({ event }) => {
     );
   }
 
-  const { title, description, image, date, location } = event;
+  const { id, title, description, image, date, location } = event;
 
   return (
     <>
@@ -73,6 +74,7 @@ const EventsDetail = ({ event }) => {
       <EventContent>
         <p>{description}</p>
       </EventContent>
+      <Comments eventId={id} />
     </>
   );
 };

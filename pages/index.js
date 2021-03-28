@@ -3,6 +3,7 @@ import Head from "next/head";
 // import { getFeaturedEvents } from "../data";
 import { filterFeaturedEvents } from "../helpers/api-util";
 import EventList from "../components/events/EventList";
+import NewsletterRegistration from "../components/input/NewsletterRegistration";
 
 export const getStaticProps = async () => {
   const featuredEvents = await filterFeaturedEvents();
@@ -25,6 +26,7 @@ const HomePage = ({ featuredEvents }) => {
         <title>NextJS Events</title>
         <meta name='description' content='Hello world' />
       </Head>
+      <NewsletterRegistration />
       <EventList events={featuredEvents} />
     </div>
   );
