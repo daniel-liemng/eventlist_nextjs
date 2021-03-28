@@ -14,7 +14,6 @@ const NewsletterRegistration = () => {
 
     const enteredEmail = emailInputRef.current.value;
 
-    console.log(enteredEmail);
     const res = await fetch("/api/newsletter", {
       method: "POST",
       headers: {
