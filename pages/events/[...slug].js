@@ -1,19 +1,21 @@
 import { useRouter } from "next/router";
 
-import { getFilteredEvents } from "../../data";
+// import { getFilteredEvents } from "../../data";
+import {
+  filterFeaturedEvents,
+  getFilteredEvents,
+} from "../../helpers/api-util";
 import EventList from "../../components/events/EventList";
 import ResultTitle from "../../components/events/ResultTitle";
 import Button from "../../components/ui/Button";
 import ErrorAlert from "../../components/ui/ErrorAlert";
 
-const Filter = () => {
-  const router = useRouter();
+export const getServerSideProps = async (context) => {
+  const { params } = context;
 
-  const filterData = router.query.slug;
+  console.log("123", params);
 
-  if (!filterData) {
-    return <p className='center'>Loading...</p>;
-  }
+  const filterData = params.slug;
 
   const filteredYear = filterData[0];
   const filteredMonth = filterData[1];
@@ -29,6 +31,57 @@ const Filter = () => {
     numMonth < 1 ||
     numMonth > 12
   ) {
+    return {
+      props: { hasError: true },
+
+      // notFound: true,
+
+      // redirect: {
+      //   destination: "/error",
+      // },
+    };
+  }
+
+  const filteredEvents = await getFilteredEvents({
+    year: numYear,
+    month: numMonth,
+  });
+
+  return {
+    props: {
+      events: filteredEvents,
+      date: {
+        year: numYear,
+        month: numMonth,
+      },
+    },
+  };
+};
+
+const Filter = ({ hasError, events, date }) => {
+  const router = useRouter();
+
+  // const filterData = router.query.slug;
+
+  // if (!filterData) {
+  //   return <p className='center'>Loading...</p>;
+  // }
+
+  // const filteredYear = filterData[0];
+  // const filteredMonth = filterData[1];
+
+  // const numYear = +filteredYear;
+  // const numMonth = +filteredMonth;
+
+  if (
+    // isNaN(numYear) ||
+    // isNaN(numMonth) ||
+    // numYear < 2021 ||
+    // numYear > 2030 ||
+    // numMonth < 1 ||
+    // numMonth > 12
+    hasError
+  ) {
     return (
       <div className='center'>
         <ErrorAlert>
@@ -39,7 +92,9 @@ const Filter = () => {
     );
   }
 
-  const filteredEvents = getFilteredEvents({ year: numYear, month: numMonth });
+  // const filteredEvents = await getFilteredEvents({ year: numYear, month: numMonth });
+
+  const filteredEvents = events;
 
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
@@ -52,11 +107,13 @@ const Filter = () => {
     );
   }
 
-  const date = new Date(numYear, numMonth - 1);
+  // const date = new Date(numYear, numMonth - 1);
+
+  const newDate = new Date(date.year, date.month - 1);
 
   return (
     <>
-      <ResultTitle date={date} />
+      <ResultTitle date={newDate} />
       <EventList events={filteredEvents} />
     </>
   );
